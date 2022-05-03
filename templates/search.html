@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='drop_div'>
+
+    <label class="droplb" for="cars">Choose an attribute:</label>
+    <select class="drop" id="attribute" name="att">
+        <option value="danceability">Danceability</option>
+        <option value="loudness">Loudness</option>
+        <option value="liveness">Liveness</option>
+        <option value="acousticness">Acousticness</option>
+    </select>
+
+    <label class="droplb" for="comparision">Comparision:</label>
+    <select class="drop" id="comparision" name="com">
+        <option value="gt">Greater than</option>
+        <option value="lt">Less than</option>
+        <option value="eq">Equal to</option>
+    </select>
+</div>
+<div class='search'>
+    <input class='search_pos' id="search_value" placeholder="Search songs by attributes" type='text'>
+    <button class="search_btn" id="get_muzz">Get Muzz</button>
+</div>
+{% endblock %}
+{% block scripts %}
+<link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+<script async src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js" type="text/javascript"></script>
+
+<script>
+    $(document).ready(function () {
+        function createTable(object) {
+            $('#content').append('<table id="jsonTable"><thead><tr></tr></thead><tbody></tbody></table>');
+
+            $.each(Object.keys(object[0]), function (index, key) {
+                $('#jsonTable thead tr').append('<th>' + key + '</th>');
+            });
+            $.each(object, function (index, jsonObject) {
+                if (Object.keys(jsonObject).length > 0) {
+                    var tableRow = '<tr>';
+                    $.each(Object.keys(jsonObject), function (i, key) {
+                        tableRow += '<td>' + jsonObject[key] + '</td>';
+                    });
+                    tableRow += "</tr>";
+                    $('#jsonTable tbody').append(tableRow);
+                }
+            });
+        }
+
+        $("#get_muzz").click(function () {
+            $("#content").remove();
+            $(".div_bor2").append("<div id='content'></div>");
+            console.log($("#attribute").val(), $("#comparision").val(), $("#search_value").val())
+            $.ajax({
+                url: "/search_by?attribute=" + $("#attribute").val()
+                    + "&comparision=" + $("#comparision").val()
+                    + "&value=" + $("#search_value").val(),
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function (res) {
+                    console.log(res);
+                    // table creation
+                    createTable(res)
+                    $('#jsonTable').DataTable();
+
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

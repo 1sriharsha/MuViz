@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Muviz Home</title>
+    <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var default_heads = []
+            var default_vals = []
+            var factor = {}
+            var myChart;
+            $.getJSON("/stats", async function (data) {
+                console.log(data);
+                for (var i = 0, l = data.length; i < l; i++) {
+                    default_heads.push(data[i]["_id"].toUpperCase());
+                    console.log(Math.abs(data[i]["Average"] * 100 / (data[i]["Maximum"] - data[i]["Minimum"])));
+                    default_vals.push(Math.abs(data[i]["Average"] * 100 / (data[i]["Maximum"] - data[i]["Minimum"])))
+                    factor[data[i]["_id"].toLowerCase()] = 100 / (data[i]["Maximum"] - data[i]["Minimum"])
+                }
+                console.log(factor)
+                const datanew = {
+                    labels: default_heads,
+                    datasets: [{
+                        label: 'Average Stats from Dataset',
+                        data: default_vals,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        pointBackgroundColor: 'rgb(255, 99, 132)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(255, 99, 132)'
+                    }]
+                };
+                myChart = create_chat(datanew);
+            });
+
+            function create_chat(data) {
+                // alert("Creating chart");
+                // console.log(data);
+                const config = {
+                    type: 'radar',
+                    data: data,
+                    options: {
+                        elements: {
+                            line: {
+                                borderWidth: 3
+                            }
+                        }
+                    },
+                };
+
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+                return myChart
+            }
+
+
+            var got_data = false
+            $("#search").on('input', function () {
+                console.log($("#search").val())
+                var length = $("#search").val().length;
+                if (length >= 4 && got_data == false) {
+                    $.getJSON("/song?by=regex&name=" + $("#search").val(), function (data) {
+                        console.log(data)
+                        got_data = true
+                        $("#search").autocomplete({
+                            source: data
+                        });
+                        $("body").css({"overflow": "visible"})
+                    });
+                } else {
+                    got_data = false
+                }
+
+            });
+
+            $("#vizzme").click(function () {
+                $.getJSON("/song?by=name&name=" + $("#search").val(), function (data) {
+                    // var default_heads = []
+                    var default_vals_2 = []
+                    console.log(data);
+                    for (const [key, value] of Object.entries(factor)) {
+                        default_vals_2.push(data[0][key] * value);
+                    }
+
+                    const datanew = {
+                        labels: default_heads,
+                        datasets: [{
+                            label: 'Average Stats from Dataset',
+                            data: default_vals,
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        },
+                            {
+                                label: data["name"],
+                                data: default_vals_2,
+                                fill: true,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgb(54, 162, 235)',
+                                pointBackgroundColor: 'rgb(54, 162, 235)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgb(54, 162, 235)'
+                            }]
+                    };
+                    create_chat(datanew);
+                });
+
+            });
+        });
+    </script>
+
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<div class='div_bor1'>
+    <div class="div_bor2">
+        <div class="menu">
+            <a href="index">
+                <button class='selected'>Home</button>
+            </a>
+            <a href="search">
+                <button class='menu_btn'>Search</button>
+            </a>
+            <a href="about">
+                <button class='menu_btn'>About us</button>
+            </a>
+        </div>
+        <hr>
+        <div class="title">MuViz</div>
+        <div class="div_btn">
+
+        </div>
+        <div class='search'>
+            <input class='search_pos' id="search" placeholder="Type your song" type='text'>
+            <button class="search_btn" id="vizzme">Vizz me</button>
+        </div>
+        <div id="radar">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+</div>
+</body>
+</html>

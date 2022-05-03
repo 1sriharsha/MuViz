@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Muviz Home</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block scripts %}
+    {% endblock %}
+</head>
+<body>
+
+<div class='div_bor1'>
+    <div class="div_bor2">
+        <div class="menu">
+            <a href="home">
+                <button  class={{ btn_classes[0] }}>Home</button>
+            </a>
+            <a href="search">
+                <button class={{ btn_classes[1]}}>Search</button>
+            </a>
+            <a href="about">
+                <button  class={{ btn_classes[2] }}>About us</button>
+            </a>
+        </div>
+        <hr>
+        <div class="title">MuViz</div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>
