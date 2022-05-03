@@ -36,7 +36,7 @@
             });
             $.each(object, function (index, jsonObject) {
                 if (Object.keys(jsonObject).length > 0) {
-                    var tableRow = '<tr>';
+                    var tableRow = '<tr style = "background :#c9ebd4">';
                     $.each(Object.keys(jsonObject), function (i, key) {
                         tableRow += '<td>' + jsonObject[key] + '</td>';
                     });
