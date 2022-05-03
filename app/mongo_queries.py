@@ -101,7 +101,7 @@ class MongoOperations:
                                                                              {comparision: value}}
                                                                     },
                                                                    {'$limit': self.limit},
-                                                                   {"$unset": ["_id"]}],
+                                                                   {"$unset": ["_id","acousticness","album_id", "danceability", "disc_number", "energy", "explicit", "instrumentalness", "key", "liveness", "loudness", "mode", "speechiness", "tempo", "time_signature", "track_number", "valence", "year"]}],
                                                                   cursor={}, allowDiskUse=True)):
                 songs.append(i)
         except Exception as e:

@@ -31,7 +31,6 @@
     $(document).ready(function () {
         function createTable(object) {
             $('#content').append('<table id="jsonTable"><thead><tr></tr></thead><tbody></tbody></table>');
-
             $.each(Object.keys(object[0]), function (index, key) {
                 $('#jsonTable thead tr').append('<th>' + key + '</th>');
             });
