@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class = "form">
+    <form>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="artists">artists:</label><br>
+        <input type="text" id="artists" name="name"><br>
+        <label for="album">Album:</label><br>
+        <input type="text" id="album" name="album"><br>
+        <label for="release_date">Release Date:</label><br>
+        <input type="text" id="release_date" name="release_date"><br>
+        <label for="year">Year:</label><br>
+        <input type="text" id="year" name="year"><br>
+        <label for="acousticness">Acousticness:</label><br>
+        <input type="text" id="acousticness" name="acousticness"><br>
+        <label for="danceability">Danceability:</label><br>
+        <input type="text" id="danceability" name="danceability"><br>
+        <label for="duration_ms">Duration:</label><br>
+        <input type="text" id="duration_ms" name="duration_ms"><br>
+        <label for="energy">Energy:</label><br>
+        <input type="text" id="energy" name="energy"><br>
+        <label for="instrumentalness">Instrumentalness:</label><br>
+        <input type="text" id="instrumentalness" name="instrumentalness"><br>
+        <label for="liveness">Liveness:</label><br>
+        <input type="text" id="liveness" name="liveness"><br>
+        <label for="loudness">Loudness:</label><br>
+        <input type="text" id="loudness" name="loudness"><br>
+        <label for="speechiness">Speechiness:</label><br>
+        <input type="text" id="speechiness" name="speechiness"><br>
+        <label for="tempo">Tempo:</label><br>
+        <input type="text" id="tempo" name="tempo"><br>
+        <label for="valence">Valence:</label><br>
+        <input type="text" id="valence" name="valence"><br>
+    </form>
+      
+</div>
+{% endblock %}
+{% block scripts%}
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+{% endblock %}

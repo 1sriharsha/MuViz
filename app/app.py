@@ -35,6 +35,10 @@ def home_page():
 def search_page():
     return render_template("search.html", btn_classes=["menu_btn", "selected", "menu_btn"])
 
+@app.route("/insert")
+def insert_page():
+    return render_template("insert.html", btn_classes=["menu_btn", "menu_btn", "selected"])
+
 
 @app.route("/song")
 def song_search():
