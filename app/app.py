@@ -1,9 +1,9 @@
 import configparser
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 
 from mongo_queries import MongoOperations
-
+import json
 app = Flask(__name__)
 
 conf = configparser.ConfigParser()
@@ -25,6 +25,9 @@ else:
     print("Connection unsuccessful, exiting application")
     exit(0)
 
+@app.route("/")
+def red():
+    return redirect("/home")
 
 @app.route("/home")
 def home_page():
@@ -62,6 +65,18 @@ def search_by():
 def stats():
     return jsonify(mongodb_stats.stats())
 
+@app.route("/add_song",methods=["POST"])
+def add_song():
+    return jsonify(mongodb_songs.insert(json.loads(request.get_data().decode())))
+
+@app.route("/delete_song",methods=["POST"])
+def del_song():
+    print(json.loads(request.get_data().decode()))
+    return jsonify(mongodb_songs.delete(json.loads(request.get_data().decode())["id"]))
+
+@app.route("/update_song",methods=["POST"])
+def update_song():
+    return jsonify(mongodb_songs.update(json.loads(request.get_data().decode())["id"],json.loads(request.get_data().decode())["values"]))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host=conf.get("app", "host"),debug=conf.get("app", "debug"))

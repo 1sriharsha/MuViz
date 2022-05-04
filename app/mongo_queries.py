@@ -93,12 +93,21 @@ class MongoOperations:
             print("error in ", self.__class__, " ", e)
         return res
 
+    def insert(self,document):
+        try:
+            self.db[self.collection_name].insert_one(document)
+            return True
+        except Exception as e:
+            print("error in ", self.__class__, " ", e)
+            return False
+
     def exec_query(self, attribute, comparision, value):
         songs = []
         try:
             for i in list(self.db[self.collection_name].aggregate([{"$match":
                                                                         {attribute:
-                                                                             {comparision: value}}
+                                                                             {comparision: value}
+                                                                         }
                                                                     },
                                                                    {'$limit': self.limit},
                                                                    {"$unset": ["_id","acousticness","album_id", "danceability", "disc_number", "energy", "explicit", "instrumentalness", "key", "liveness", "loudness", "mode", "speechiness", "tempo", "time_signature", "track_number", "valence", "year"]}],
@@ -107,3 +116,21 @@ class MongoOperations:
         except Exception as e:
             print("error in ", self.__class__, " ", e)
         return songs
+
+    def delete(self,id):
+        try:
+            self.db[self.collection_name].delete_one({"id":id})
+            return True
+        except Exception as e:
+            print("In deletion ",e)
+            return False
+
+    def update(self,id,values):
+        try:
+            print(locals())
+            update_vals = {"$set": values}
+            self.db[self.collection_name].update_one({"id":id},update_vals)
+            return True
+        except Exception as e:
+            print("In updation ",e)
+            return False

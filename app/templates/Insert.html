@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class = "form">
-    <form>
+    <div>
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
         <label for="artists">artists:</label><br>
@@ -32,10 +32,57 @@
         <input type="text" id="tempo" name="tempo"><br>
         <label for="valence">Valence:</label><br>
         <input type="text" id="valence" name="valence"><br>
-    </form>
+    </div>
+    <button id="submit">Submit</button>
+
       
 </div>
 {% endblock %}
-{% block scripts%}
+{% block scripts %}
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+<script>
+    $( document ).ready(function() {
+        console.log("DONEEEE")
+        $("#submit").click(function () {
+            alert("BOOOOOM");
+            var js_item = {
+                "acousticness": 0.00645,
+                "album": "Polib Si Dedu",
+                "album_id": "401djSPoSCDFalhD5KIbJv",
+                "artist_ids": "['0ZDbrXYXNaO94VjgXjdFh7']",
+                "artists": "['Wohnout']",
+                "danceability": 0.659,
+                "disc_number": "1",
+                "duration_ms": 228720,
+                "energy": 0.67,
+                "explicit": "False",
+                "id": "0Mf2UKqVtFKgYcqQhdkL5k",
+                "instrumentalness": 0.418,
+                "key": "1",
+                "liveness": 0.0795,
+                "loudness": -6.334,
+                "mode": "1",
+                "name": "Beatles",
+                "release_date": "2006-09-11",
+                "speechiness": 0.0244,
+                "tempo": 129.972,
+                "time_signature": "4.0",
+                "track_number": "10",
+                "valence": 0.151,
+                "year": 2006
+            }
+            for (const prop in js_item) {
+                console.log(prop);
+              js_item[prop]=$("#"+prop).val()
+            }
+            console.log(js_item)
+            $.post("/add_song",js_item,
+                function (res) {
+                    console.log(res);
+            });
+        });
+
+    });
+</script>
+<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {% endblock %}
